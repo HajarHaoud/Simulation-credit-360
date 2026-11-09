@@ -1,0 +1,66 @@
+package ma.credit360.web;
+
+import java.nio.charset.StandardCharsets;
+import ma.credit360.domain.Utilisateur;
+import ma.credit360.service.PieceService;
+import ma.credit360.web.dto.ChecklistDto;
+import ma.credit360.web.dto.DossierDto;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+@RestController
+@RequestMapping("/api/dossiers/{reference}")
+public class PieceController {
+
+    private final PieceService service;
+
+    public PieceController(PieceService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/pieces")
+    public ChecklistDto checklist(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference) {
+        return service.checklist(u, reference);
+    }
+
+    @PostMapping(path = "/pieces/{pieceId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ChecklistDto deposer(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference,
+                                @PathVariable Long pieceId,
+                                @RequestParam(value = "fichier", required = false) MultipartFile fichier) {
+        return service.deposer(u, reference, pieceId, fichier);
+    }
+
+    @DeleteMapping("/pieces/{pieceId}")
+    public ChecklistDto supprimer(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference,
+                                  @PathVariable Long pieceId) {
+        return service.supprimer(u, reference, pieceId);
+    }
+
+    @GetMapping("/pieces/{pieceId}/fichier")
+    public ResponseEntity<Resource> fichier(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference,
+                                            @PathVariable Long pieceId) {
+        PieceService.Telechargement t = service.fichier(u, reference, pieceId);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(t.typeMime()))
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.inline().filename(t.nom(), StandardCharsets.UTF_8).build().toString())
+                .body(t.ressource());
+    }
+
+    @PostMapping("/soumettre")
+    public DossierDto soumettre(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference) {
+        return service.soumettre(u, reference);
+    }
+}

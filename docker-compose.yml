@@ -1,0 +1,14 @@
+# Base PostgreSQL optionnelle (le back-end fonctionne aussi sans, avec H2).
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: credit360
+      POSTGRES_USER: credit360
+      POSTGRES_PASSWORD: credit360
+    ports:
+      - "5432:5432"
+    volumes:
+      - credit360-db:/var/lib/postgresql/data
+volumes:
+  credit360-db:

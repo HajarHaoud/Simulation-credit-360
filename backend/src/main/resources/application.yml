@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  application:
+    name: credit360
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 6MB
+  # Profil par défaut : base H2 stockée dans ./data (aucune installation requise).
+  datasource:
+    url: jdbc:h2:file:./data/credit360;MODE=PostgreSQL;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update   # à remplacer par Flyway au moment du déploiement (étape 6)
+
+app:
+  storage:
+    dir: ${STORAGE_DIR:./data/uploads}   # pièces déposées (à sauvegarder avec la base)
+  jwt:
+    # Secret de DÉVELOPPEMENT uniquement. En production : variable d'environnement JWT_SECRET (Base64, 32 octets minimum).
+    secret: ${JWT_SECRET:wPvuhhkJ4b9yIumhQJv84OCAh1IPR1H7elOeMl5FrJZccwnSMtuqccqA/xShYxtp}
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:480}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
+  seed-demo-data: ${SEED_DEMO_DATA:true}
