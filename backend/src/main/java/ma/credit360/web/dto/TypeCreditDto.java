@@ -1,8 +1,9 @@
 package ma.credit360.web.dto;
 
 import java.math.BigDecimal;
-import ma.credit360.domain.Famille;
-import ma.credit360.domain.TypeCredit;
+
+import ma.credit360.entity.Famille;
+import ma.credit360.entity.TypeCredit;
 
 public record TypeCreditDto(String id, String libelle, Famille famille, BigDecimal taux,
                             long montantMin, long montantMax, int dureeMin, int dureeMax) {

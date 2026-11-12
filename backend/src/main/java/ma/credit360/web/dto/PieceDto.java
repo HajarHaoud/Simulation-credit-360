@@ -1,7 +1,7 @@
 package ma.credit360.web.dto;
 
-import ma.credit360.domain.PieceDeposee;
-import ma.credit360.domain.PieceRequise;
+import ma.credit360.entity.PieceDeposee;
+import ma.credit360.entity.PieceRequise;
 
 public record PieceDto(Long id, String libelle, boolean obligatoire, FichierDto fichier) {
     public static PieceDto de(PieceRequise r, PieceDeposee depot) {

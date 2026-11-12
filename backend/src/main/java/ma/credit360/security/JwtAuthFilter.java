@@ -6,7 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import ma.credit360.domain.Utilisateur;
+
+import ma.credit360.entity.Utilisateur;
 import ma.credit360.repository.UtilisateurRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
-import ma.credit360.domain.Dossier;
-import ma.credit360.domain.Role;
-import ma.credit360.domain.Statut;
-import ma.credit360.domain.TypeCredit;
-import ma.credit360.domain.Utilisateur;
+
+import ma.credit360.entity.Dossier;
+import ma.credit360.entity.Role;
+import ma.credit360.entity.Statut;
+import ma.credit360.entity.TypeCredit;
+import ma.credit360.entity.Utilisateur;
 import ma.credit360.repository.DossierRepository;
 import ma.credit360.repository.TypeCreditRepository;
 import ma.credit360.repository.UtilisateurRepository;

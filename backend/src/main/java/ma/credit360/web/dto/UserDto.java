@@ -1,7 +1,7 @@
 package ma.credit360.web.dto;
 
-import ma.credit360.domain.Role;
-import ma.credit360.domain.Utilisateur;
+import ma.credit360.entity.Role;
+import ma.credit360.entity.Utilisateur;
 
 public record UserDto(Long id, String nom, String fonction, String email, Role role) {
     public static UserDto de(Utilisateur u) {

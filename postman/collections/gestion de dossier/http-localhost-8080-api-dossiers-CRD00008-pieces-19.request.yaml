@@ -1,0 +1,19 @@
+$kind: http-request
+name: http://localhost:8080/api/dossiers/CRD00008/pieces/19
+description: ""
+url: http://localhost:8080/api/dossiers/CRD00008/pieces/19
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: fichier
+      src:
+        - /C:/Users/HIA/Downloads/قرار فتح المباراة.pdf
+      description: ""
+      disabled: false
+auth:
+  type: bearer
+  credentials:
+    token: "{{json_web_token_0tn4}}"
+order: 1000

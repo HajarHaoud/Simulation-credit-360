@@ -1,4 +1,4 @@
-package ma.credit360.domain;
+package ma.credit360.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

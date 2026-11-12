@@ -1,12 +1,15 @@
 package ma.credit360.web;
 
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import ma.credit360.domain.Utilisateur;
+
+import ma.credit360.entity.Utilisateur;
 import ma.credit360.service.PieceService;
 import ma.credit360.web.dto.ChecklistDto;
 import ma.credit360.web.dto.DossierDto;
+
 import org.springframework.core.io.Resource;
-import org.springframework.http.ContentDisposition;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,36 +34,88 @@ public class PieceController {
     }
 
     @GetMapping("/pieces")
-    public ChecklistDto checklist(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference) {
+    public ChecklistDto checklist(
+            @AuthenticationPrincipal Utilisateur u,
+            @PathVariable String reference) {
+
         return service.checklist(u, reference);
     }
 
-    @PostMapping(path = "/pieces/{pieceId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ChecklistDto deposer(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference,
-                                @PathVariable Long pieceId,
-                                @RequestParam(value = "fichier", required = false) MultipartFile fichier) {
+    @PostMapping(
+            path = "/pieces/{pieceId}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ChecklistDto deposer(
+            @AuthenticationPrincipal Utilisateur u,
+            @PathVariable String reference,
+            @PathVariable Long pieceId,
+            @RequestParam("fichier") MultipartFile fichier) {
+
         return service.deposer(u, reference, pieceId, fichier);
     }
 
     @DeleteMapping("/pieces/{pieceId}")
-    public ChecklistDto supprimer(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference,
-                                  @PathVariable Long pieceId) {
+    public ChecklistDto supprimer(
+            @AuthenticationPrincipal Utilisateur u,
+            @PathVariable String reference,
+            @PathVariable Long pieceId) {
+
         return service.supprimer(u, reference, pieceId);
     }
 
+    /**
+     * Affiche ou télécharge le fichier déposé.
+     * Le nom UTF-8 est transmis selon RFC 5987.
+     */
     @GetMapping("/pieces/{pieceId}/fichier")
-    public ResponseEntity<Resource> fichier(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference,
-                                            @PathVariable Long pieceId) {
-        PieceService.Telechargement t = service.fichier(u, reference, pieceId);
+    public ResponseEntity<Resource> fichier(
+            @AuthenticationPrincipal Utilisateur u,
+            @PathVariable String reference,
+            @PathVariable Long pieceId) throws Exception {
+
+        PieceService.Telechargement t =
+                service.fichier(u, reference, pieceId);
+
+        Resource ressource = t.ressource();
+
+        String nom = t.nom();
+
+        String nomEncode = URLEncoder
+                .encode(nom, StandardCharsets.UTF_8)
+                .replace("+", "%20")
+                .replace("%7E", "~");
+
+        String nomSecours = nom
+                .replaceAll("[^a-zA-Z0-9._-]", "_")
+                .replaceAll("[\\r\\n\"]", "_");
+
+        String disposition = "inline; filename=\""
+                + nomSecours
+                + "\"; filename*=UTF-8''"
+                + nomEncode;
+
+        MediaType mediaType;
+
+        try {
+            mediaType = MediaType.parseMediaType(t.typeMime());
+        } catch (Exception e) {
+            mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        }
+
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(t.typeMime()))
-                .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.inline().filename(t.nom(), StandardCharsets.UTF_8).build().toString())
-                .body(t.ressource());
+                .contentType(mediaType)
+                .contentLength(ressource.contentLength())
+                .header(HttpHeaders.CONTENT_DISPOSITION, disposition)
+                .header("X-Content-Type-Options", "nosniff")
+                .cacheControl(CacheControl.noStore())
+                .body(ressource);
     }
 
     @PostMapping("/soumettre")
-    public DossierDto soumettre(@AuthenticationPrincipal Utilisateur u, @PathVariable String reference) {
+    public DossierDto soumettre(
+            @AuthenticationPrincipal Utilisateur u,
+            @PathVariable String reference) {
+
         return service.soumettre(u, reference);
     }
 }

@@ -2,8 +2,9 @@ package ma.credit360.web;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import ma.credit360.domain.Statut;
-import ma.credit360.domain.Utilisateur;
+
+import ma.credit360.entity.Statut;
+import ma.credit360.entity.Utilisateur;
 import ma.credit360.service.DossierService;
 import ma.credit360.web.dto.CreerDossierRequest;
 import ma.credit360.web.dto.DossierDto;

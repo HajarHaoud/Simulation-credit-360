@@ -1,0 +1,10 @@
+$kind: http-request
+name: http://localhost:8080/api/dossiers
+description: ""
+url: http://localhost:8080/api/dossiers
+method: GET
+auth:
+  type: bearer
+  credentials:
+    token: "{{json_web_token_0tn4}}"
+order: 842

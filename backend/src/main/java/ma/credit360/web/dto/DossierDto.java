@@ -1,8 +1,9 @@
 package ma.credit360.web.dto;
 
 import java.time.LocalDate;
-import ma.credit360.domain.Dossier;
-import ma.credit360.domain.Statut;
+
+import ma.credit360.entity.Dossier;
+import ma.credit360.entity.Statut;
 
 public record DossierDto(String reference, String client, String clientNom, String clientPrenom, String cin,
                          String telephone, String email, String profession, String adresse, Long revenuMensuel,

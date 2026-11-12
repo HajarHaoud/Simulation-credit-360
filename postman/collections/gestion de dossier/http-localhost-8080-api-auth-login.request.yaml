@@ -1,0 +1,15 @@
+$kind: http-request
+name: http://localhost:8080/api/auth/login
+description: ""
+url: http://localhost:8080/api/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"email\": \"conseiller@credit360.ma\",\r
+
+    \  \"motDePasse\": \"demo1234\"\r
+
+    }"
+order: 35

@@ -1,0 +1,36 @@
+$kind: http-request
+name: http://localhost:8080/api/dossiers
+url: http://localhost:8080/api/dossiers
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"nom\": \"Test\",\r
+
+    \  \"prenom\": \"Client\",\r
+
+    \  \"cin\": \"TEST123456\",\r
+
+    \  \"telephone\": \"0612345678\",\r
+
+    \  \"email\": \"test.client@example.com\",\r
+
+    \  \"profession\": \"Salarié\",\r
+
+    \  \"adresse\": \"Settat\",\r
+
+    \  \"revenuMensuel\": 8500,\r
+
+    \  \"typeId\": \"immobilier\",\r
+
+    \  \"montant\": 1000000,\r
+
+    \  \"duree\": 120\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{json_web_token_0cko}}"
+order: 1000

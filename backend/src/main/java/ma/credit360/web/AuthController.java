@@ -1,7 +1,7 @@
 package ma.credit360.web;
 
 import jakarta.validation.Valid;
-import ma.credit360.domain.Utilisateur;
+import ma.credit360.entity.Utilisateur;
 import ma.credit360.repository.UtilisateurRepository;
 import ma.credit360.security.JwtService;
 import ma.credit360.web.dto.LoginRequest;
